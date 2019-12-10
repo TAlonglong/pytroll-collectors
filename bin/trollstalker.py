@@ -291,9 +291,14 @@ def create_notifier(topic, instrument, posttroll_port, filepattern,
 
     notifier = NewThreadedNotifier(manager, event_handler)
 
+    config_auto_add = False
+    if 'add_watch_auto_add' in custom_vars:
+        config_auto_add = custom_vars['add_watch_auto_add']
+        LOGGER.debug("add_watch auto_add option is set to: %s", str(config_auto_add))
+
     # Add directories and event masks to watch manager
     for monitored_dir in monitored_dirs:
-        manager.add_watch(monitored_dir, event_mask, rec=True)
+        manager.add_watch(monitored_dir, event_mask, rec=True, auto_add=config_auto_add)
 
     return notifier
 
